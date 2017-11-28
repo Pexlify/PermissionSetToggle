@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>PermissionSets__c</fullName>
+        <description>This field controls which permission sets will be assigned to users. Adding &amp; removing values here will assign &amp; unassign the corresponding permission sets.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select which permission sets should be assign to this user.</inlineHelpText>
+        <label>Permission Sets</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>PermissionSet1.Name</fullName>
+                    <default>false</default>
+                    <label>PermissionSet1.Name</label>
+                </value>
+                <value>
+                    <fullName>PermissionSet2.Name</fullName>
+                    <default>false</default>
+                    <label>PermissionSet2.Name</label>
+                </value>
+                <value>
+                    <fullName>PermissionSet3.Name</fullName>
+                    <default>false</default>
+                    <label>PermissionSet3.Name</label>
+                </value>
+                <value>
+                    <fullName>PermissionSetX.Name</fullName>
+                    <default>false</default>
+                    <label>PermissionSetX.Name</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>5</visibleLines>
+    </fields>
+</CustomObject>
