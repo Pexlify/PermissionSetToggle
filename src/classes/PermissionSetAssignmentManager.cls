@@ -67,23 +67,22 @@ public with sharing class PermissionSetAssignmentManager {
 						}
 					}
 
-					permissionSetsToUpsertPerUserMap.put(u.Id, addedPermisssionSets);
-					permissionSetsToDeletePerUserMap.put(u.Id, deletedPermissionSets);
+					if (!addedPermisssionSets.isEmpty())
+						permissionSetsToUpsertPerUserMap.put(u.Id, addedPermisssionSets);
+					
+					if (!deletedPermissionSets.isEmpty())
+						permissionSetsToDeletePerUserMap.put(u.Id, deletedPermissionSets);
 				}
 			}
 		}
 
-		Map<Id, PermissionSetAssignment> assignmentsToUpsert = createAssignmentList(permissionSetsToUpsertPerUserMap);
-		upsert assignmentsToUpsert.values();
-
-		Map<Id, PermissionSetAssignment> assigmentsToDelete = createAssignmentList(permissionSetsToDeletePerUserMap);
-		assigmentsToDelete.remove(null);
-		delete assigmentsToDelete.values();
+		upsert createAssignmentList(permissionSetsToUpsertPerUserMap, false);
+		delete createAssignmentList(permissionSetsToDeletePerUserMap, true);
 	}
 
-	private static Map<Id, PermissionSetAssignment> createAssignmentList (Map<Id, List<String>> userPSAsToGenerate) {
+	private static List<PermissionSetAssignment> createAssignmentList (Map<Id, List<String>> userPSAsToGenerate, Boolean isDelete) {
 
-		Map<Id, PermissionSetAssignment> assignmentsToReturn = new Map<Id, PermissionSetAssignment>();
+		List<PermissionSetAssignment> assignmentsToReturn = new List<PermissionSetAssignment>();
 
 		for (Id userId : userPSAsToGenerate.keySet()) {
 
@@ -101,14 +100,16 @@ public with sharing class PermissionSetAssignmentManager {
 					? userAssignments.get(userId)
 					: null; 
 
-				assignmentsToReturn.put(
-					existingAssignmentId,
-					new PermissionSetAssignment(
-						Id = existingAssignmentId,
-						AssigneeId = userId,
-						PermissionSetId = permissionSetNameMap.get(psName)
-					)
-				);
+				if (!isDelete || (isDelete && existingAssignmentId != null)) {
+
+					assignmentsToReturn.add(
+						new PermissionSetAssignment(
+							Id = existingAssignmentId,
+							AssigneeId = userId,
+							PermissionSetId = permissionSetNameMap.get(psName)
+						)
+					);
+				}
 			}
 		}
 
